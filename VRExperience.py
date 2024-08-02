@@ -13,12 +13,26 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy
+import numpy as np
+
+
+def convert_to_class_labels(values):
+    return np.where(values <= 3, 0, 1)
+
+def convert_to_class_labels_EvenOdd(values):
+    return np.where(values % 2 == 0, 0, 1) 
+
+def convert_to_class_classification_multi(values):
+    classification = [0]*10
+    for j in range(0,10):
+        classification[j] = classification[j]+np.where(values <= j, 0, 1)
+    return classification
 
 
 
 # Defition of Data Set Path
-vr_dataset = pd.read_csv("RealisticModelData.csv")
+vr_dataset = pd.read_csv("Test_Data.csv")
+vr_dataset_modeled = pd.read_csv("GAN-Results.csv")
 
 # Check dataset with print first 5 rows
 print(vr_dataset.head())
@@ -131,27 +145,27 @@ data = vr_dataset['MotionSickness']
 Data_train, Data_test, data_train, data_test = train_test_split(Data, data, test_size=0.3, random_state=42)
 
 # Train and test Logistic Regression model
-logistic_model = LogisticRegression(max_iter=1000)
-logistic_model.fit(Data_train, data_train)
+#logistic_model = LogisticRegression(max_iter=1000)
+#logistic_model.fit(Data_train, data_train)
 
-y_pred_logistic = logistic_model.predict(Data_test)
-accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
+#y_pred_logistic = logistic_model.predict(Data_test)
+#accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
 
-print(y_pred_logistic)
-print('Genauigkeit: ', accuracy_logistic)
+#print(y_pred_logistic)
+#print('Genauigkeit: ', accuracy_logistic)
 
 print(' ')
 print(' ')
 
 # Train and test SVM model
-svm_model = SVC()
-svm_model.fit(Data_train, data_train)
+#vm_model = SVC()
+#svm_model.fit(Data_train, data_train)
 
-y_pred_svm = svm_model.predict(Data_test)
-accuracy_svm = accuracy_score(data_test, y_pred_svm)
+#y_pred_svm = svm_model.predict(Data_test)
+#accuracy_svm = accuracy_score(data_test, y_pred_svm)
 
-print(y_pred_svm)
-print('Genauigkeit: ', accuracy_svm)
+#print(y_pred_svm)
+#print('Genauigkeit: ', accuracy_svm)
 
 print(' ')
 print(' ')
@@ -181,6 +195,39 @@ print('Genauigkeit: ', accuracy_decision_tree)
 
 print(' ')
 print(' ')
+
+
+print('Ab hier werden Accuracies Classification berechnet')
+
+
+true_class_labels = convert_to_class_labels(vr_dataset["ImmersionLevel"])
+pred_class_labels = convert_to_class_labels(vr_dataset_modeled["ImmersionLevel"]) #GAN
+
+
+
+accuracy = np.size(true_class_labels == pred_class_labels)
+
+print(f"Classification Accuracy (1-3 / 4-5): {accuracy:.2f}")
+
+
+true_class_labels = convert_to_class_labels_EvenOdd(vr_dataset["ImmersionLevel"])
+pred_class_labels = convert_to_class_labels_EvenOdd(vr_dataset_modeled["ImmersionLevel"])#GAN
+
+accuracy = np.mean(true_class_labels == pred_class_labels)
+
+
+print(f"Classification Accuracy (Gerade / Ungerade ): {accuracy:.2f}")
+
+print("    ")
+print("    ")
+print("    ")
+
+
+
+
+
+
+
 
 # Store the individual accuracies in a dictionary
 #individual_accuracies = {

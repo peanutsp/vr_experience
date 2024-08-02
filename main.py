@@ -12,22 +12,29 @@ import sys
 import math
 import pylab
 import matplotlib.pyplot as plt
-
 # from GAN-DataModeler import Generator
 # Ein Beispiel zur Integration von 'GAN-DataModeler.py'
 
-with open("GAN-DataModeler.py") as file:
+if __name__ == "__main__":
+    
+    with open("GAN-DataModeler.py") as file:
 
-    code = file.read()
-    exec(code)
+        code = file.read()
+        exec(code)
 
-with open("GAN-Estimator.py") as file:
-        
-    code = file.read()
-    exec(code)
+
+    for i in range (1,11):
+        print(i)
+        with open("GANEstimator.py") as file:
+            code = file.read()
+            exec(code)
 
 # Workflow:
 
 # 1. ) Eingabe der Parameter (UserID, Age, Gender, VRHeadset, Duration)
 # 2. ) Auslagerung von MotionSickness und Immersionslevel in ein externes Files oder MySQL-Datenbank
 # 3. ) Lege eine Schnittstelle (MySQL-Datenbank fest), welche für unterschiedliche Nutzer die berechneten Parameter speichert
+
+
+#Accuracy berechnen (Mail)
+

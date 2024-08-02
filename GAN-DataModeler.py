@@ -36,9 +36,7 @@ def Generator(ID, length):
 
         if (k == 1):
 
-                        # TO DOs: Teste Genauigkeit für Gaußverteilte Daten (verwende anstatt 'random.randint(10, 100)' --> 'random.gauss(mu, sigma)' - Mittelwert mu || standard abweichung --> sigma -> math.sqrt(variance) mit mu und sigma aus Python statements in Pandas
-                        # df['Key'].copy() projiziert den Datensatz auf den reduzierten Datensatz mit Tabellenspalten Key 
-                        # df['Key'].mean() definiert den Mittelwert und df['Key'].std() definiert die Standardabweichung
+        
 
             output_key[1] = random.randint(10, 100) # Alter im Bereich von zehr bis Hundert Jahre
 
@@ -77,8 +75,8 @@ def Generator(ID, length):
             duration_mean = df['Duration'].mean()
             duration_std = df['Duration'].std()
 
-            output_key[4] = random.gauss(duration_mean,duration_std)
-            # output_key[4] = random.uniform(df['Duration'].min(),df['Duration'].max())
+            #output_key[4] = random.gauss(duration_mean,duration_std)
+            output_key[4] = random.uniform(df['Duration'].min(),df['Duration'].max())
 
         if (k == 5):
 
@@ -87,7 +85,8 @@ def Generator(ID, length):
             motionsickness_mean = df['MotionSickness'].mean()
             motionsickness_std = df['MotionSickness'].std()
             
-            output_key[5] = custom_round(random.gauss(motionsickness_mean,motionsickness_std))
+            output_key[5] = random.randint(df['MotionSickness'].min(),df['MotionSickness'].max())
+           # output_key[5] = custom_round(random.gauss(motionsickness_mean,motionsickness_std))
 
         if (k == 6):
 
@@ -95,8 +94,8 @@ def Generator(ID, length):
 
             immersion_mean = df['ImmersionLevel'].mean()
             immersion_std = df['ImmersionLevel'].std()
-            output_key[6] = custom_round(random.gauss(immersion_mean,immersion_std))
-        #    output_key[6] = random.randint(df['ImmersionLevel'].min(),df['ImmersionLevel'].max())
+            #output_key[6] = custom_round(random.gauss(immersion_mean,immersion_std))
+            output_key[6] = random.randint(df['ImmersionLevel'].min(),df['ImmersionLevel'].max())
 
 
     return(output_key)
@@ -112,57 +111,61 @@ def Differentiator(df, data_1, data_2, data_3, data_4, data_5, data_6, data_7, a
 
     return similarity_measure
 
-# Replace 'your_file.csv' with the path to your CSV file
-df = pd.read_csv('C:/Users/Pero/Documents/Python Scripts/Kaggle/data.csv')
 
-# Code for printing to a file
-sample = open('ModelData.csv', 'w')
-
-# Code for printing to a file
-sample_realistic = open('RealisticModelData.csv', 'w')
-
-data = []
-index = 0
-sample_size = 5000
-number_of_similar_data_maps = 3
-data_dimension = 7
-data_similarity = 95.0
-
-print(','.join(['UserID', 'Age', 'Gender', 'VRHeadset', 'Duration', 'MotionSickness', 'ImmersionLevel']), file=sample)
-
-for i in range(1, sample_size):
-
-    writer_var = Generator(i, data_dimension)
-    print(writer_var[0], ',', writer_var[1], ',', writer_var[2], ',', writer_var[3], ',', writer_var[4], ',', writer_var[5], ',', writer_var[6], file = sample)
-
-print(','.join(['UserID', 'Age', 'Gender', 'VRHeadset', 'Duration', 'MotionSickness', 'ImmersionLevel']), file=sample_realistic)
-
-for j in range(0, number_of_similar_data_maps):
-
-    print(j)
-
-    for i in range(1, 1002):
-
-        similarity = 0
-
-        while(1==1):
-
-            writer_var = Generator(i, data_dimension)
-
-
+if __name__ == "__main__":
     
-    # if ((df.iloc[j]['Age']-writer_var[1])/writer_var[1]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['Duration']-writer_var[4])/writer_var[4]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['MotionSickness']-writer_var[5])/writer_var[5]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['ImmersionLevel']-writer_var[6])/writer_var[6]*100.0 < (100.0 - data_similarity)):
+    
+    # Replace 'your_file.csv' with the path to your CSV file
+    df = pd.read_csv('C:/Users/Pero/Documents/Python Scripts/Kaggle/data.csv')
 
-            similarity = Differentiator(df, writer_var[0], writer_var[1], writer_var[2], writer_var[3], writer_var[4], writer_var[5], writer_var[6], data_similarity)
-                 
-            if (similarity == 1):
+    # Code for printing to a file
+    sample = open('ModelData.csv', 'w')
 
-                print(index,',',writer_var[1], ',', writer_var[2], ',', writer_var[3], ',', writer_var[4], ',', writer_var[5], ',', writer_var[6], file = sample_realistic)    
-                index = index + 1
+    # Code for printing to a file
+    sample_realistic = open('RealisticModelData.csv', 'w')
 
-            if (similarity == 1): 
-            
-                break    
+    data = []
+    index = 0
+    sample_size = 5000
+    number_of_similar_data_maps = 1
+    data_dimension = 7
+    data_similarity = 90.0
+
+    print(','.join(['UserID', 'Age', 'Gender', 'VRHeadset', 'Duration', 'MotionSickness', 'ImmersionLevel']), file=sample)
+
+    for i in range(1, sample_size):
+
+        writer_var = Generator(i, data_dimension)
+        print(f"{index},{writer_var[1]},{writer_var[2]},{writer_var[3]},{writer_var[4]},{writer_var[5]},{writer_var[6]}", file=sample)
+
+    print(','.join(['UserID', 'Age', 'Gender', 'VRHeadset', 'Duration', 'MotionSickness', 'ImmersionLevel']), file=sample_realistic)
+
+    for j in range(0, number_of_similar_data_maps):
+
+        print(j)
+
+        for i in range(1, 1001): #TODO: number of rows of pf
+
+            similarity = 0
+
+            while(1==1):
+
+                writer_var = Generator(i, data_dimension)
 
 
-# Versuche den Unterschied zwischen dem SVM-Modell und einem Modell wie Decision Tree anhand der Ergebnisse und der Modell-Definitionen zu verstehen
+        
+        # if ((df.iloc[j]['Age']-writer_var[1])/writer_var[1]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['Duration']-writer_var[4])/writer_var[4]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['MotionSickness']-writer_var[5])/writer_var[5]*100.0 < (100.0 - data_similarity) and (df.iloc[j]['ImmersionLevel']-writer_var[6])/writer_var[6]*100.0 < (100.0 - data_similarity)):
+
+                similarity = Differentiator(df, writer_var[0], writer_var[1], writer_var[2], writer_var[3], writer_var[4], writer_var[5], writer_var[6], data_similarity)
+                    
+                if (similarity == 1):
+
+                    print(f"{index+1},{writer_var[1]},{writer_var[2]},{writer_var[3]},{writer_var[4]},{writer_var[5]},{writer_var[6]}", file=sample_realistic)
+                    index = index + 1
+
+                if (similarity == 1): 
+                
+                    break    
+
+
+    # Versuche den Unterschied zwischen dem SVM-Modell und einem Modell wie Decision Tree anhand der Ergebnisse und der Modell-Definitionen zu verstehen
