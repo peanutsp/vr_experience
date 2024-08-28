@@ -111,7 +111,6 @@ def Differentiator(df, data_1, data_2, data_3, data_4, data_5, data_6, data_7, a
 
     return similarity_measure
 
-
 if __name__ == "__main__":
     
     
@@ -126,7 +125,7 @@ if __name__ == "__main__":
 
     data = []
     index = 0
-    sample_size = 5000
+    sample_size = 1000
     number_of_similar_data_maps = 1
     data_dimension = 7
     data_similarity = 90.0

@@ -15,19 +15,34 @@ import matplotlib.pyplot as plt
 # from GAN-DataModeler import Generator
 # Ein Beispiel zur Integration von 'GAN-DataModeler.py'
 
+
+
 if __name__ == "__main__":
     
+    print("Init")
     with open("GAN-DataModeler.py") as file:
 
         code = file.read()
+        print("Modelling data with GAN-Datamodeler")
         exec(code)
 
-
-    for i in range (1,11):
-        print(i)
-        with open("GANEstimator.py") as file:
-            code = file.read()
-            exec(code)
+    with open("GANEstimator.py") as file:
+        code = file.read()
+        print("Running estimation with GANEstimator")
+        exec(code)
+            
+    with open("Correlations.py") as file:
+        
+        code = file.read()
+        print("Calculating correlations")
+        exec(code)
+        
+    with open("VRExperience.py") as file:
+        code = file.read()
+        print("Calculating accuracies")
+        exec(code)
+        
+    
 
 # Workflow:
 
@@ -36,5 +51,5 @@ if __name__ == "__main__":
 # 3. ) Lege eine Schnittstelle (MySQL-Datenbank fest), welche für unterschiedliche Nutzer die berechneten Parameter speichert
 
 
-#Accuracy berechnen (Mail)
+# Accuracy mit verschiedenen Data_similarities in GAN-Estimator
 
