@@ -25,214 +25,203 @@ def convert_to_class_labels_EvenOdd(values):
 def convert_to_class_classification_multi(values):
     classification = [0]*10
     for j in range(0,10):
-        classification[j] = np.where(values == j, 0, 1)
+        classification[j] = classification[j]+np.where(values <= j, 0, 1)
     return classification
 
 
-if __name__ == "__main__":
-    # Defition of Data Set Path
-    vr_dataset = pd.read_csv("Kaggle\data.csv")
-    vr_dataset_modeled = pd.read_csv("GAN-Results.csv")
 
-    output_file = open('OutputFile.txt', 'w')
-    # Check dataset with print first 5 rows
-    print(vr_dataset.head())
+# Defition of Data Set Path
+vr_dataset = pd.read_csv("Test_Data.csv")
+vr_dataset_modeled = pd.read_csv("GAN-Results.csv")
 
-    # Teste alle Variablen
-    print(vr_dataset.isnull().sum())
+# Check dataset with print first 5 rows
+print(vr_dataset.head())
 
-    # Lösche alle Einträge in der ersten Spalte
-    vr_dataset = vr_dataset.drop(columns=['UserID'])
+# Teste alle Variablen
+print(vr_dataset.isnull().sum())
 
-    # Encode categorical columns
-    # Call the constructor of LE.
-    le = LabelEncoder()
+# Lösche alle Einträge in der ersten Spalte
+vr_dataset = vr_dataset.drop(columns=['UserID'])
 
-    # Select categorical columns using it's type. They are referred to as 'object'.
-    categorical_cols = vr_dataset.select_dtypes(include=['object']).columns
+# Encode categorical columns
+# Call the constructor of LE.
+le = LabelEncoder()
 
-    # Use LE with a lambda function to apply encoding to all selected columns
-    vr_dataset[categorical_cols] = vr_dataset[categorical_cols].apply(lambda col: le.fit_transform(col))
+# Select categorical columns using it's type. They are referred to as 'object'.
+categorical_cols = vr_dataset.select_dtypes(include=['object']).columns
 
-    # Split the data into features and target variable
-    # Drop the dependent variable column.
-    Data = vr_dataset.drop(columns=['ImmersionLevel'])
+# Use LE with a lambda function to apply encoding to all selected columns
+vr_dataset[categorical_cols] = vr_dataset[categorical_cols].apply(lambda col: le.fit_transform(col))
 
-    # Normalize the features
-    # Call the constructor
-    scaler = StandardScaler()
+# Split the data into features and target variable
+# Drop the dependent variable column.
+Data = vr_dataset.drop(columns=['ImmersionLevel'])
 
-    # Apply it to all columns
-    Data = pd.DataFrame(scaler.fit_transform(Data), columns=Data.columns)
+# Normalize the features
+# Call the constructor
+scaler = StandardScaler()
 
-    # Split the data into training and test sets (!)
-    data = vr_dataset['ImmersionLevel']
+# Apply it to all columns
+Data = pd.DataFrame(scaler.fit_transform(Data), columns=Data.columns)
 
+# Split the data into training and test sets (!)
+data = vr_dataset['ImmersionLevel']
 
-    # Split the X and y values to 30% test - 70% train
-    Data_train, Data_test, data_train, data_test = train_test_split(Data, data, test_size=0.3, random_state=42)
 
-    # Train and test Logistic Regression model
-    logistic_model = LogisticRegression()
-    logistic_model.fit(Data_train, data_train)
+# Split the X and y values to 30% test - 70% train
+Data_train, Data_test, data_train, data_test = train_test_split(Data, data, test_size=0.3, random_state=42)
 
-    y_pred_logistic = logistic_model.predict(Data_test)
-    accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
+# Train and test Logistic Regression model
+logistic_model = LogisticRegression()
+logistic_model.fit(Data_train, data_train)
 
-    print(y_pred_logistic, file=output_file)
-    print('Genauigkeit: ', accuracy_logistic, file=output_file)#
+y_pred_logistic = logistic_model.predict(Data_test)
+accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print(y_pred_logistic)
+print('Genauigkeit: ', accuracy_logistic)
 
-    # Train and test SVM model
-    svm_model = SVC()
-    svm_model.fit(Data_train, data_train)
+print(' ')
+print(' ')
 
-    y_pred_svm = svm_model.predict(Data_test)
-    accuracy_svm = accuracy_score(data_test, y_pred_svm)
+# Train and test SVM model
+svm_model = SVC()
+svm_model.fit(Data_train, data_train)
 
-    print(y_pred_svm), file = output_file
-    print('Genauigkeit: ', accuracy_svm, file = output_file)
+y_pred_svm = svm_model.predict(Data_test)
+accuracy_svm = accuracy_score(data_test, y_pred_svm)
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print(y_pred_svm)
+print('Genauigkeit: ', accuracy_svm)
 
-    # Train and test Decision Tree model
-    decision_tree_model = DecisionTreeClassifier()
-    decision_tree_model.fit(Data_train, data_train)
+print(' ')
+print(' ')
 
-    y_pred_decision_tree = decision_tree_model.predict(Data_test)
-    accuracy_decision_tree = accuracy_score(data_test, y_pred_decision_tree)
+# Train and test Decision Tree model
+decision_tree_model = DecisionTreeClassifier()
+decision_tree_model.fit(Data_train, data_train)
 
-    print(y_pred_decision_tree, file = output_file)
-    print('Genauigkeit: ', accuracy_decision_tree, file = output_file)
+y_pred_decision_tree = decision_tree_model.predict(Data_test)
+accuracy_decision_tree = accuracy_score(data_test, y_pred_decision_tree)
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print(y_pred_decision_tree)
+print('Genauigkeit: ', accuracy_decision_tree)
 
-    # Train and test Random Forest model
-    random_forest_model = RandomForestClassifier()
-    random_forest_model.fit(Data_train, data_train)
+print(' ')
+print(' ')
 
-    y_pred_random_forest = random_forest_model.predict(Data_test)
-    accuracy_random_forest = accuracy_score(data_test, y_pred_random_forest)
+# Train and test Random Forest model
+random_forest_model = RandomForestClassifier()
+random_forest_model.fit(Data_train, data_train)
 
-    print(y_pred_decision_tree, file = output_file)
-    print('Genauigkeit: ', accuracy_decision_tree, file = output_file)
+y_pred_random_forest = random_forest_model.predict(Data_test)
+accuracy_random_forest = accuracy_score(data_test, y_pred_random_forest)
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print(y_pred_decision_tree)
+print('Genauigkeit: ', accuracy_decision_tree)
 
+print(' ')
+print(' ')
 
-    print(' ', file = output_file)
-    print('Ab hier werden MotionSickness Levels berechnet', file = output_file)
-    print(' ', file = output_file)
+# --- Ab hier werden MotionSickness Levels berechnet --- #
 
-    Data = vr_dataset.drop(columns=['MotionSickness'])
+print(' ')
+print('Ab hier werden MotionSickness Levels berechnet')
+print(' ')
 
-    # Normalize the features
-    # Call the constructor
-    scaler = StandardScaler()
+Data = vr_dataset.drop(columns=['MotionSickness'])
 
-    # Apply it to all columns
-    Data = pd.DataFrame(scaler.fit_transform(Data), columns=Data.columns)
+# Normalize the features
+# Call the constructor
+scaler = StandardScaler()
 
-    # Split the data into training and test sets (!)
-    data = vr_dataset['MotionSickness']
+# Apply it to all columns
+Data = pd.DataFrame(scaler.fit_transform(Data), columns=Data.columns)
 
-    # Split the X and y values to 30% test - 70% train
-    Data_train, Data_test, data_train, data_test = train_test_split(Data, data, test_size=0.3, random_state=42)
+# Split the data into training and test sets (!)
+data = vr_dataset['MotionSickness']
 
-    # Train and test Logistic Regression model
-    #logistic_model = LogisticRegression(max_iter=1000)
-    #logistic_model.fit(Data_train, data_train)
+# Split the X and y values to 30% test - 70% train
+Data_train, Data_test, data_train, data_test = train_test_split(Data, data, test_size=0.3, random_state=42)
 
-    #y_pred_logistic = logistic_model.predict(Data_test)
-    #accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
+# Train and test Logistic Regression model
+#logistic_model = LogisticRegression(max_iter=1000)
+#logistic_model.fit(Data_train, data_train)
 
-    #print(y_pred_logistic)
-    #print('Genauigkeit: ', accuracy_logistic)
+#y_pred_logistic = logistic_model.predict(Data_test)
+#accuracy_logistic = accuracy_score(data_test, y_pred_logistic)
 
-    print(' ', file = output_file)#
-    print(' ', file = output_file)
+#print(y_pred_logistic)
+#print('Genauigkeit: ', accuracy_logistic)
 
-    # Train and test SVM model
-    #vm_model = SVC()
-    #svm_model.fit(Data_train, data_train)
+print(' ')
+print(' ')
 
-    #y_pred_svm = svm_model.predict(Data_test)
-    #accuracy_svm = accuracy_score(data_test, y_pred_svm)
+# Train and test SVM model
+#vm_model = SVC()
+#svm_model.fit(Data_train, data_train)
 
-    #print(y_pred_svm)
-    #print('Genauigkeit: ', accuracy_svm)
+#y_pred_svm = svm_model.predict(Data_test)
+#accuracy_svm = accuracy_score(data_test, y_pred_svm)
 
+#print(y_pred_svm)
+#print('Genauigkeit: ', accuracy_svm)
 
+print(' ')
+print(' ')
 
-    # Train and test Decision Tree model
-    decision_tree_model = DecisionTreeClassifier()
-    decision_tree_model.fit(Data_train, data_train)
+# Train and test Decision Tree model
+decision_tree_model = DecisionTreeClassifier()
+decision_tree_model.fit(Data_train, data_train)
 
-    y_pred_decision_tree = decision_tree_model.predict(Data_test)
-    accuracy_decision_tree = accuracy_score(data_test, y_pred_decision_tree)
+y_pred_decision_tree = decision_tree_model.predict(Data_test)
+accuracy_decision_tree = accuracy_score(data_test, y_pred_decision_tree)
 
-    print(y_pred_decision_tree, file = output_file)
-    print('Genauigkeit: ', accuracy_decision_tree, file = output_file)
+print(y_pred_decision_tree)
+print('Genauigkeit: ', accuracy_decision_tree)
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print(' ')
+print(' ')
 
+# Train and test Random Forest model
+random_forest_model = RandomForestClassifier()
+random_forest_model.fit(Data_train, data_train)
 
-    # Train and test Random Forest model
-    random_forest_model = RandomForestClassifier()
-    random_forest_model.fit(Data_train, data_train)
+y_pred_random_forest = random_forest_model.predict(Data_test)
+accuracy_random_forest = accuracy_score(data_test, y_pred_random_forest)
 
-    y_pred_random_forest = random_forest_model.predict(Data_test)
-    accuracy_random_forest = accuracy_score(data_test, y_pred_random_forest)
+print(y_pred_decision_tree)
+print('Genauigkeit: ', accuracy_decision_tree)
 
-    print(y_pred_decision_tree, file = output_file)
-    print('Genauigkeit: ', accuracy_decision_tree, file = output_file)
+print(' ')
+print(' ')
 
-    print(' ', file = output_file)
-    print(' ', file = output_file)
 
+print('Ab hier werden Accuracies Classification berechnet')
 
-    print('Ab hier werden Accuracies Classification berechnet', file = output_file)
 
+true_class_labels = convert_to_class_labels(vr_dataset["ImmersionLevel"])
+pred_class_labels = convert_to_class_labels(vr_dataset_modeled["ImmersionLevel"]) #GAN
 
-    true_class_labels = convert_to_class_labels(vr_dataset["ImmersionLevel"])
-    pred_class_labels = convert_to_class_labels(vr_dataset_modeled["ImmersionLevel"]) #GAN
 
 
+accuracy = np.size(true_class_labels == pred_class_labels)
 
-    accuracy = np.mean(true_class_labels == pred_class_labels)
+print(f"Classification Accuracy (1-3 / 4-5): {accuracy:.2f}")
 
-    print(f"Classification Accuracy (1-3 / 4-5): {accuracy:.2f}", file = output_file)
 
+true_class_labels = convert_to_class_labels_EvenOdd(vr_dataset["ImmersionLevel"])
+pred_class_labels = convert_to_class_labels_EvenOdd(vr_dataset_modeled["ImmersionLevel"])#GAN
 
-    true_class_labels = convert_to_class_labels_EvenOdd(vr_dataset["ImmersionLevel"])
-    pred_class_labels = convert_to_class_labels_EvenOdd(vr_dataset_modeled["ImmersionLevel"])#GAN
+accuracy = np.mean(true_class_labels == pred_class_labels)
 
-    accuracy = np.mean(true_class_labels == pred_class_labels)
 
+print(f"Classification Accuracy (Gerade / Ungerade ): {accuracy:.2f}")
 
-    print(f"Classification Accuracy (Gerade / Ungerade ): {accuracy:.2f}", file = output_file)
-    print(' ', file = output_file)
-    print(' ', file = output_file)
+print("    ")
+print("    ")
+print("    ")
 
-
-
-    true_class_labels = convert_to_class_classification_multi(vr_dataset["ImmersionLevel"])
-    pred_class_labels = convert_to_class_classification_multi(vr_dataset_modeled["ImmersionLevel"])#GAN
-
-    for j in range(0, len(true_class_labels)):
-
-        accuracy = accuracy + np.mean(true_class_labels[j] == pred_class_labels[j])
-        
-    accuracy = accuracy / len(true_class_labels)
-
-
-    print(f"Classification Accuracy (Multi ): {accuracy:.2f}", file = output_file)
 
 
 

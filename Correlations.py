@@ -15,31 +15,30 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-if __name__ == "__main__":
-    
-    df = pd.read_csv('Kaggle\data.csv')
 
-    df_realistic = pd.read_csv('RealisticModelData.csv')
+df = pd.read_csv('Kaggle\data.csv')
 
-    df_reduced = df.replace({'Oculus Rift': 1.0, 'HTC Vive': 2.0, 'PlayStation VR': 3.0, 'Male': 4.0, 'Female':5.0, 'Other':6.0})
+df_realistic = pd.read_csv('RealisticModelData.csv')
 
-    df_reduced_realistic = df_realistic.replace({'Oculus Rift': 1.0, 'HTC Vive': 2.0, 'PlayStation VR': 3.0, 'Male': 4.0, 'Female':5.0, 'Other':6.0})
+df_reduced = df.replace({'Oculus Rift': 1.0, 'HTC Vive': 2.0, 'PlayStation VR': 3.0, 'Male': 4.0, 'Female':5.0, 'Other':6.0})
 
-    #df_reduced = df[['Gender']].copy()
+df_reduced_realistic = df_realistic.replace({'Oculus Rift': 1.0, 'HTC Vive': 2.0, 'PlayStation VR': 3.0, 'Male': 4.0, 'Female':5.0, 'Other':6.0})
 
-    #print(df_reduced.value_counts())
+#df_reduced = df[['Gender']].copy()
 
-    #print(df_reduced)
-    print(df_reduced_realistic.corr())
-    print("   ")
-    print("   ")
-    print(df_reduced.corr())
-    print("   ")
-    print("   ")
-    print(df_reduced.corr(method='spearman'))
-    print("   ")
-    print("   ")
-    print(df_reduced.corr(method='pearson'))
+#print(df_reduced.value_counts())
+
+#print(df_reduced)
+print(df_reduced_realistic.corr())
+print("   ")
+print("   ")
+print(df_reduced.corr())
+print("   ")
+print("   ")
+print(df_reduced.corr(method='spearman'))
+print("   ")
+print("   ")
+print(df_reduced.corr(method='pearson'))
 
 #HTC Vive,42.574083299362634,6,3
 #5,51,Male,PlayStation VR,22.452646660410768,4,2
