@@ -1,0 +1,13 @@
+Age: 20
+Anxiety Level: 0
+Depression Level: 5
+Insomnia Level: 0
+OCD Level: 0
+Exploratory: No
+Foreign Language: No
+Favorite Genre: EDM
+Instrumentalist: No
+Composer: No
+Primary Streaming Service: Spotify
+While Working: Yes
+Music Effect: No effect
